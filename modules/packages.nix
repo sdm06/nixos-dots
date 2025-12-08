@@ -1,10 +1,5 @@
 { pkgs, ... }:
 
-let
-  myAzure = pkgs.azure-cli.withExtensions (exts: [
-    exts.azure-iot
-  ]);
-in
 {
   home.packages = with pkgs; [
     # --- GUI & Desktop ---
@@ -38,7 +33,6 @@ in
     lazydocker
     lazygit
     nodejs          # Needed for Nvim Copilot/Lazy/servers
-    myAzure
     terraform
     rust-analyzer
   ];

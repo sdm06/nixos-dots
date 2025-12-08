@@ -23,6 +23,7 @@ in
     ./modules/bash.nix
     ./modules/tmux.nix
     ./modules/git.nix
+    ./modules/azure.nix
   ];
 
   # --- USER INFO ---
