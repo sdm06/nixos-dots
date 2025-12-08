@@ -34,6 +34,7 @@
 
       # oxwm stuff
       #asdf = "cd ~/repos/oxwm; nix develop";
+      az-iot = "docker run --rm -it -v $HOME/.azure:/root/.azure -v \"$(pwd):/data\" -w /data mcr.microsoft.com/azure-cli";
       
       # navigation
       ".." = "cd ..";
