@@ -85,6 +85,8 @@
       };
   };
 
+  virtualisation.docker.enable = true;
+
   services.picom.enable = true;
 
   # --- POWER MANAGEMENT ---
@@ -140,7 +142,7 @@
 
   users.users.sdmnix = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     packages = with pkgs; [
       tree
     ];

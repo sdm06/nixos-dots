@@ -1,5 +1,10 @@
 { pkgs, ... }:
 
+let
+  myAzure = pkgs.azure-cli.withExtensions (exts: [
+    exts.azure-iot
+  ]);
+in
 {
   home.packages = with pkgs; [
     # --- GUI & Desktop ---
@@ -27,10 +32,13 @@
     tree
     
     # --- Development & Cloud ---
-    git
     gcc             # C Compiler (Needed for Nvim Treesitter)
+    docker
+    docker-compose
+    lazydocker
+    lazygit
     nodejs          # Needed for Nvim Copilot/Lazy/servers
-    azure-cli
+    myAzure
     terraform
     rust-analyzer
   ];

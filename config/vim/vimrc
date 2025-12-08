@@ -1,0 +1,18 @@
+source ~/.vim/options.vim
+source ~/.vim/keybinds.vim
+source ~/.vim/plugins.vim
+source ~/.vim/colors.vim
+source ~/.vim/fzf.vim
+source ~/.vim/lightline.vim
+source ~/.vim/lsp.vim
+filetype plugin indent on
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set number
+set relativenumber
+set smartindent
+set showmatch
+set backspace=indent,eol,start
+syntax on
