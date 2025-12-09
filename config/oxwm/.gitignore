@@ -1,0 +1,13 @@
+# Rust / Cargo
+target/
+.direnv/
+
+# Nix
+result
+
+# User config
+src/config.rs
+
+# Notes
+notes/
+*.md

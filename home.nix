@@ -77,6 +77,15 @@ in
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     XCURSOR_SIZE = "40";
   };
+  xresources.properties = {
+    "Xft.dpi" = 144;  # Try 120 or 144 for MacBook screens
+    "Xft.autohint" = 0;
+    "Xft.lcdfilter" = "lcddefault";
+    "Xft.hintstyle" = "hintfull";
+    "Xft.hinting" = 1;
+    "Xft.antialias" = 1;
+    "Xft.rgba" = "rgb";
+  };
   
   # --- CURSOR THEME ---
   home.pointerCursor = {

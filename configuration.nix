@@ -4,6 +4,8 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./modules/suckless.nix
+      ./modules/oxwm.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -67,7 +69,22 @@
 
   time.timeZone = "Europe/Warsaw";
 
-  services.displayManager.ly.enable = true;
+  services.displayManager.ly = {
+    enable = true;
+    settings = {
+      # 0: none, 1: doom, 2: matrix, 3: arcade
+      animation = "matrix";
+      
+      # Hide the borders around the box?
+      hide_borders = false;
+      
+      # Show the clock?
+      clock = true;
+      
+      # Save the last username used?
+      save = true;
+    };
+  };
   
   services.xserver = {
     enable = true;
