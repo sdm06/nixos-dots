@@ -77,18 +77,23 @@
       
       # Hide the borders around the box?
       hide_borders = false;
-      
-      # Show the clock?
-      clock = true;
-      
       # Save the last username used?
       save = true;
     };
   };
-  
+ # SYSTEM-WIDE ADBLOCK 
+ networking.extraHosts =
+    let
+      hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
+      hostsFile = pkgs.fetchurl {
+        url = hostsPath;
+        sha256 = "sha256-vCANoAZVFFiaYvnJa9cHnhoIGm+n5G2Tk8m/VHGa1kc=";
+      };
+  in builtins.readFile hostsFile; 
+
   services.xserver = {
     enable = true;
-    autoRepeatDelay = 400;
+    autoRepeatDelay = 200;
     autoRepeatInterval = 35;
     windowManager.qtile.enable = true;
   };

@@ -1,45 +1,44 @@
 { config, pkgs, ... }:
 
 let
-  # 1. Define the OXWM Package
-  # This tells Nix how to compile the code from your config folder
-  oxwm = pkgs.stdenv.mkDerivation {
-    name = "oxwm";
-    version = "0.1";
-    
-    # Point to your local folder (Pure Relative Path)
+  # Define the Rust Package
+  oxwm = pkgs.rustPlatform.buildRustPackage {
+    pname = "oxwm";
+    version = "0.1.0";
+
+    # Point to your local folder
     src = ../config/oxwm;
 
-    # Dependencies (Standard X11 libraries)
-    buildInputs = with pkgs.xorg; [
-      libX11
-      libXft
-      libXinerama
-      libXrandr
-      libxcb
-    ];
+    # Rust specific: Lockfile handles dependencies
+    cargoLock = {
+      lockFile = ../config/oxwm/Cargo.lock;
+    };
 
-    # Installation logic
-    # We force the destination to be the Nix store output ($out)
-    installPhase = ''
-      mkdir -p $out/bin
-      make install PREFIX=$out
-    '';
+    # Compile-time tools (needed to find system libraries)
+    nativeBuildInputs = [ pkgs.pkg-config ];
+
+    # Runtime Libraries (Rust crates link against these)
+    buildInputs = with pkgs.xorg; [
+      libxcb
+      libX11
+      libXrandr
+      libXinerama
+      libXft
+    ];
   };
 in
 {
-  # 2. Install it to System Packages
+  # 1. Install oxwm to system
   environment.systemPackages = [ oxwm ];
 
-  # 3. Register as a Window Manager Session
-  # This makes "oxwm" appear in your Ly login screen
+  # 2. Register the Session for Ly
   services.xserver.windowManager.session = [{
     name = "oxwm";
     start = ''
-      # 1. Load Xresources (Scaling)
+      # Load Scaling
       ${pkgs.xorg.xrdb}/bin/xrdb -merge $HOME/.Xresources
-
-      # 4. Start the Window Manager
+      
+      # Start OXWM
       ${oxwm}/bin/oxwm
     '';
   }];

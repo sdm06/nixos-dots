@@ -7,6 +7,8 @@
     xwallpaper
     picom
     pavucontrol
+    librewolf
+    zed-editor
 
     # --- System Utilities ---
     btop            # Process monitor
@@ -28,6 +30,7 @@
     
     # --- Development & Cloud ---
     gcc             # C Compiler (Needed for Nvim Treesitter)
+    gnumake
     docker
     docker-compose
     lazydocker

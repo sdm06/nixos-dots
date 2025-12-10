@@ -31,6 +31,7 @@
       nc = "nvim ~/nixos-dotfiles/.";
       nh = "nvim ~/nixos-dotfiles/home.nix";
       np = "nvim ~/nixos-dotfiles/modules/packages.nix";
+      nclean = "sudo nix-collect-garbage --delete-older-than 3d && nix-store --optimise";
 
       # oxwm stuff
       #asdf = "cd ~/repos/oxwm; nix develop";

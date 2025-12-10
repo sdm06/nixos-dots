@@ -10,6 +10,7 @@ def autostart():
     home = os.path.expanduser('~')
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
 
+
 mod = "mod4"
 terminal = guess_terminal()
 myTerm = "alacritty" 
@@ -37,14 +38,16 @@ keys = [
 
     # --- CLIPBOARD (Greenclip) ---
     Key([mod], "v", lazy.spawn("rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'")),
+    # --- DMENU ---
+    Key([mod], "p", lazy.spawn("dmenu_run -fn 'JetBrainsMono Nerd Font-14' -nb '#1a1b26' -nf '#a9b1d6' -sb '#7aa2f7' -sf '#1a1b26'")),
 
     # --- ROFI MENUS (New Additions) ---
     # These assume the scripts are in your PATH (~/nixos-dotfiles/scripts/rofi-menus)
     # If they are just in 'scripts', remove the 'rofi-menus/' prefix.
     Key([mod], "d", lazy.spawn("rofi -show drun -show-icons"), desc='Run Launcher'),
-    Key([mod], "x", lazy.spawn("rofi-menus/dm-kill"), desc="Kill Process Menu"),
-    Key([mod], "c", lazy.spawn("rofi-menus/dm-conf"), desc="Edit Configs Menu"),
-    Key([mod], "n", lazy.spawn("rofi-menus/dm-note"), desc="Notes Menu"),
+#   Key([mod], "x", lazy.spawn("rofi-menus/dm-kill"), desc="Kill Process Menu"),
+#   Key([mod], "c", lazy.spawn("rofi-menus/dm-conf"), desc="Edit Configs Menu"),
+#   Key([mod], "n", lazy.spawn("rofi-menus/dm-note"), desc="Notes Menu"),
     # You can add more from that repo here (dm-wifi, dm-bookman, etc.)
 
     # --- SYSTEM / LAYOUT ---
