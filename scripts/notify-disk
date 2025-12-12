@@ -1,0 +1,3 @@
+#!/bin/sh
+INFO=$(df -h --output=target,used,avail,pcent / /home | tail -n +2)
+dunstify -a "System" -i "drive-harddisk" -t 4000 "Disk Usage" "$INFO"

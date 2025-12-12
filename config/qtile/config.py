@@ -5,15 +5,23 @@ from libqtile.utils import guess_terminal
 import os
 import subprocess
 
+# --- AUTOSTART HOOK ---
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~')
+    # Start Notification Daemon
+    subprocess.Popen(["dunst"])
+    # Start Network Manager Applet (System Tray)
+    subprocess.Popen(["nm-applet"])
+    # Optional: Run your custom shell script if you have one
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
-
 
 mod = "mod4"
 terminal = guess_terminal()
 myTerm = "alacritty" 
+
+# Variable for HOME to use in paths below
+home = os.path.expanduser('~')
 
 keys = [
     # --- WINDOW FOCUS ---
@@ -38,17 +46,12 @@ keys = [
 
     # --- CLIPBOARD (Greenclip) ---
     Key([mod], "v", lazy.spawn("rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'")),
+    
     # --- DMENU ---
     Key([mod], "p", lazy.spawn("dmenu_run -fn 'JetBrainsMono Nerd Font-14' -nb '#1a1b26' -nf '#a9b1d6' -sb '#7aa2f7' -sf '#1a1b26'")),
 
-    # --- ROFI MENUS (New Additions) ---
-    # These assume the scripts are in your PATH (~/nixos-dotfiles/scripts/rofi-menus)
-    # If they are just in 'scripts', remove the 'rofi-menus/' prefix.
+    # --- ROFI MENUS ---
     Key([mod], "d", lazy.spawn("rofi -show drun -show-icons"), desc='Run Launcher'),
-#   Key([mod], "x", lazy.spawn("rofi-menus/dm-kill"), desc="Kill Process Menu"),
-#   Key([mod], "c", lazy.spawn("rofi-menus/dm-conf"), desc="Edit Configs Menu"),
-#   Key([mod], "n", lazy.spawn("rofi-menus/dm-note"), desc="Notes Menu"),
-    # You can add more from that repo here (dm-wifi, dm-bookman, etc.)
 
     # --- SYSTEM / LAYOUT ---
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(), desc="Toggle split"),
@@ -67,22 +70,31 @@ keys = [
         desc="Open Power Menu"
     ),
 
-    # --- SCREENSHOT (Select Area -> Copy to Clipboard) ---
+    # --- SCREENSHOT ---
     Key([mod], "s", lazy.spawn("sh -c 'maim -s -u | xclip -selection clipboard -t image/png -i'"), desc="Screenshot to clipboard"),
 
-    # --- MACBOOK F-KEYS ---
-    # Screen Brightness (F1/F2)
-    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 5%-")),
-    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +5%")),
+    # --- OSD CONTROLS (Brightness) ---
+    # Screen Brightness (XF86 + F1/F2 fallback)
+    Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness screen up")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness screen down")),
+    Key([], "F2", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness screen up")),
+    Key([], "F1", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness screen down")),
 
-    # Keyboard Backlight (F5/F6)
-    Key([], "XF86KbdBrightnessDown", lazy.spawn("brightnessctl --device='smc::kbd_backlight' set 10%-")),
-    Key([], "XF86KbdBrightnessUp", lazy.spawn("brightnessctl --device='smc::kbd_backlight' set +10%")),
-
-    # Audio (F10 Mute / F11 Down / F12 Up)
-    Key([], "XF86AudioMute", lazy.spawn("pamixer -t")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer -d 5")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer -i 5")),
+    # Keyboard Brightness (XF86 + F5/F6 fallback)
+    Key([], "XF86KbdBrightnessUp", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness kbd up")),
+    Key([], "XF86KbdBrightnessDown", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness kbd down")),
+    Key([], "F6", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness kbd up")),
+    Key([], "F5", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-brightness kbd down")),
+    
+    # --- AUDIO CONTROLS (Volume) ---
+    # Calls the 'osd-volume' script we just created
+    Key([], "XF86AudioMute", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume mute")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume down")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume up")),
+    # F-Key Fallbacks for Volume (F10/F11/F12)
+    Key([], "F10", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume mute")),
+    Key([], "F11", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume down")),
+    Key([], "F12", lazy.spawn(home + "/nixos-dotfiles/scripts/osd-volume up")),
 ]
 
 # Wayland VT switching (Optional)
@@ -105,16 +117,16 @@ for i in groups:
     ])
 
 colors = [
-    ["#1a1b26", "#1a1b26"],  # bg        (primary.background)
-    ["#a9b1d6", "#a9b1d6"],  # fg        (primary.foreground)
-    ["#32344a", "#32344a"],  # color01   (normal.black)
-    ["#f7768e", "#f7768e"],  # color02   (normal.red)
-    ["#9ece6a", "#9ece6a"],  # color03   (normal.green)
-    ["#e0af68", "#e0af68"],  # color04   (normal.yellow)
-    ["#7aa2f7", "#7aa2f7"],  # color05   (normal.blue)
-    ["#ad8ee6", "#ad8ee6"],  # color06   (normal.magenta)
-    ["#0db9d7", "#0db9d7"],  # color15   (bright.cyan)
-    ["#444b6a", "#444b6a"]   # color[9]  (bright.black)
+    ["#1a1b26", "#1a1b26"],  # bg
+    ["#a9b1d6", "#a9b1d6"],  # fg
+    ["#32344a", "#32344a"],  # color01
+    ["#f7768e", "#f7768e"],  # color02
+    ["#9ece6a", "#9ece6a"],  # color03
+    ["#e0af68", "#e0af68"],  # color04
+    ["#7aa2f7", "#7aa2f7"],  # color05
+    ["#ad8ee6", "#ad8ee6"],  # color06
+    ["#0db9d7", "#0db9d7"],  # color15
+    ["#444b6a", "#444b6a"]   # color[9]
 ]
 
 layout_theme = {
@@ -139,9 +151,6 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 sep = widget.Sep(linewidth=1, padding=8, foreground=colors[9])
-
-# Variable for HOME to use in paths below
-home = os.path.expanduser('~')
 
 screens = [
     Screen(
@@ -169,111 +178,58 @@ screens = [
                     other_current_screen_border = colors[7],
                     other_screen_border = colors[4],
                 ),
-                widget.TextBox(
-                    text = '|',
-                    font = "JetBrainsMono Nerd Font Propo Bold",
-                    foreground = colors[9],
-                    padding = 2,
-                    fontsize = 20
-                ),
-                widget.CurrentLayout(
-                    foreground = colors[1],
-                    padding = 5,
-                    fontsize=20
-                ),
-                widget.TextBox(
-                    text = '|',
-                    font = "JetBrainsMono Nerd Font Propo Bold",
-                    foreground = colors[9],
-                    padding = 2,
-                    fontsize = 20
-                ),
-                widget.WindowName(
-                    foreground = colors[6],
-                    padding = 8,
-                    max_chars = 40,
-                    fontsize = 20
-                ),
-                # Kernel Version
+                widget.TextBox(text='|', font="JetBrainsMono Nerd Font Propo Bold", foreground=colors[9], padding=2, fontsize=20),
+                widget.CurrentLayout(foreground=colors[1], padding=5, fontsize=20),
+                widget.TextBox(text='|', font="JetBrainsMono Nerd Font Propo Bold", foreground=colors[9], padding=2, fontsize=20),
+                widget.WindowName(foreground=colors[6], padding=8, max_chars=40, fontsize=20),
+                
+                # --- WIDGETS WITH CALLBACKS (FIXED) ---
                 widget.GenPollText(
-                    update_interval = 300,
-                    func = lambda: subprocess.check_output("printf $(uname -r)", shell=True, text=True),
-                    foreground = colors[3],
-                    padding = 8,
-                    fmt = '{}',
-                    fontsize = 20
+                    update_interval=300, 
+                    func=lambda: subprocess.check_output("printf $(uname -r)", shell=True, text=True), 
+                    foreground=colors[3], padding=8, fmt='{}', fontsize=20
                 ),
                 sep,
                 widget.CPU(
-                    foreground = colors[4],
-                    padding = 8,
-                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e btop')},
-                    format="CPU: {load_percent}%",
-                    fontsize = 20 
+                    foreground=colors[4], padding=8, 
+                    # Fixed: Use qtile.spawn instead of qtile.cmd_spawn
+                    mouse_callbacks={'Button1': lambda: qtile.spawn(myTerm + ' -e btop')}, 
+                    format="CPU: {load_percent}%", fontsize=20
                 ),
                 sep,
                 widget.Memory(
-                    foreground = colors[8],
-                    padding = 8,
-                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e btop')},
-                    format = 'Mem: {MemUsed:.0f}{mm}',
-                    fontsize = 20
+                    foreground=colors[8], padding=8, 
+                    mouse_callbacks={'Button1': lambda: qtile.spawn(myTerm + ' -e btop')}, 
+                    format='Mem: {MemUsed:.0f}{mm}', fontsize=20
                 ),
                 sep,
-                # DISK WIDGET (Triggers notify-disk script)
+                # DISK WIDGET (Click for Notification)
                 widget.DF(
-                    update_interval = 60,
-                    foreground = colors[5],
-                    padding = 8,
-                    # FIXED PATH: Uses the 'home' variable defined above
-                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(home + '/nixos-dotfiles/scripts/notify-disk')},
-                    partition = '/',
-                    format = '{uf}{m} free',
-                    fmt = 'Disk: {}',
-                    visible_on_warn = False,
-                    fontsize = 20
+                    update_interval=60, foreground=colors[5], padding=8, 
+                    # Fixed callback
+                    mouse_callbacks={'Button1': lambda: qtile.spawn(home + '/nixos-dotfiles/scripts/notify-disk')}, 
+                    partition='/', format='{uf}{m} free', fmt='Disk: {}', visible_on_warn=False, fontsize=20
                 ),
                 sep,
-                widget.Battery(
-                    foreground=colors[6],
-                    padding=8,
-                    update_interval=5,
-                    format='{percent:2.0%} {char} {hour:d}:{min:02d}',
-                    fmt='Bat: {}',
-                    charge_char='',
-                    discharge_char='',
-                    full_char='✔',
-                    unknown_char='?',
-                    empty_char='!',
-                    mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e upower -i $(upower -e | grep BAT)'),
-                    },
-                    fontsize = 20
-                ),
+               widget.Battery(
+                    foreground=colors[6], padding=8, update_interval=5, 
+                    format='{percent:2.0%} {char} {hour:d}:{min:02d}', fmt='Bat: {}', 
+                    charge_char='', discharge_char='', full_char='✔', unknown_char='?', empty_char='!', 
+                    mouse_callbacks={'Button1': lambda: qtile.spawn(home + "/nixos-dotfiles/scripts/notify-battery")}, 
+                    fontsize=20
+                ),                sep,
+                # VOLUME WIDGET (Uses PulseAudio)
+                widget.PulseVolume(foreground=colors[7], padding=8, fmt='Vol: {}', fontsize=20, limit_max_volume=True),
                 sep,
-                # FIXED VOLUME WIDGET (Using PulseAudio backend)
-                widget.PulseVolume(
-                    foreground = colors[7],
-                    padding = 8,
-                    fmt = 'Vol: {}',
-                    fontsize = 20,
-                    limit_max_volume = True,
-                ),
-                sep,
-                # CLOCK WIDGET (Triggers notify-date script)
+                # CLOCK WIDGET (Click for Calendar Notification)
                 widget.Clock(
-                    foreground = colors[8],
-                    padding = 8,
-                    # FIXED PATH & SCRIPT: Points to notify-date, not notify-disk
-                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(home + '/nixos-dotfiles/scripts/notify-date')},
-                    format = "%a, %b %d - %H:%M",
-                    fontsize = 20
+                    foreground=colors[8], padding=8, 
+                    # Fixed callback
+                    mouse_callbacks={'Button1': lambda: qtile.spawn(home + '/nixos-dotfiles/scripts/notify-date')}, 
+                    format="%a, %b %d - %H:%M", fontsize=20
                 ),
-                widget.Systray(
-                    padding = 6,
-                    icon_size = 24
-                ),
-                widget.Spacer(length = 8),
+                widget.Systray(padding=6, icon_size=24),
+                widget.Spacer(length=8),
             ],
             margin=[0, 0, 0, 0],
             size=42 

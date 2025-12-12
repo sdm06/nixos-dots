@@ -1,0 +1,18 @@
+#!/bin/sh
+
+STATUS=$(cat /sys/class/power_supply/BAT*/status | head -n 1)
+CAPACITY=$(cat /sys/class/power_supply/BAT*/capacity | head -n 1)
+
+if [ "$STATUS" = "Charging" ]; then
+    ICON="battery-charging"
+    MSG="Charging..."
+else
+    ICON="battery"
+    MSG="Remaining"
+    if [ "$CAPACITY" -lt 20 ]; then
+        dunstify -u critical -a "System" "Low Battery" "${CAPACITY}% Remaining!"
+        exit
+    fi
+fi
+
+dunstify -a "System" -i "$ICON" -t 2000 -h int:value:"$CAPACITY" "Battery: ${CAPACITY}%" "$MSG"

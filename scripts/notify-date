@@ -1,0 +1,5 @@
+#!/bin/sh
+# Shows calendar for 10 seconds
+CALENDAR=$(cal)
+DATE=$(date "+%A, %B %d")
+dunstify -a "System" -i "office-calendar" -t 10000 "$DATE" "<span font='JetBrainsMono Nerd Font Mono 12'>$CALENDAR</span>"

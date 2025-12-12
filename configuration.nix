@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports =
@@ -14,83 +14,53 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # Hardware Support
   hardware.facetimehd.enable = true;
-  
-  # --- MACBOOK HARDWARE OPTIMIZATIONS ---
-  
-  # 1. Keyboard/Touchpad Driver tweaks
-  boot.kernelModules = [ "hid_apple" ];
-  boot.extraModprobeConfig = ''
-    options hid_apple fnmode=2
-  '';
+  hardware.graphics.enable = true; 
 
-  # 2. Kernel Params for Power & Brightness
-  boot.kernelParams = [ 
-    "acpi_osi=Linux" 
-    "acpi_backlight=video" 
-    "button.lid_init_state=open"
-  ];
-
-  # 3. Fan Control (Essential for MacBooks)
-  services.mbpfan = {
-    enable = true;
-    aggressive = false; 
-    settings.general = {
-      low_temp = 50;
-      high_temp = 55;
-      max_temp = 65;
-    };
+  # --- POWER MANAGEMENT  ---
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchExternalPower = "suspend";
+    extraConfig = ''
+      HandlePowerKey=suspend
+      HandleLidSwitch=suspend
+      HandleLidSwitchExternalPower=suspend
+      HybridSleepState=suspend
+      IdleAction=suspend
+      IdleActionSec=30m
+    '';
   };
 
-  # 4. Keyboard Wake-up Fix
-  powerManagement.enable = true;
-  powerManagement.resumeCommands = ''
-    ${pkgs.kmod}/bin/rmmod atkbd
-    ${pkgs.kmod}/bin/modprobe atkbd reset=1
-  '';
+  # Fix WiFi crashing on wake
+  networking.networkmanager.wifi.powersave = false;
 
-  # 5. NVMe d3cold Fix (Prevents crash on sleep)
-  systemd.services.disable-nvme-d3cold = {
-    enable = true;
-    description = "Disable d3cold for NVMe to fix suspend issues";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "disable-d3cold" ''
-        if [ -f /sys/bus/pci/devices/0000:01:00.0/d3cold_allowed ]; then
-          echo 0 > /sys/bus/pci/devices/0000:01:00.0/d3cold_allowed
-        fi
-      '';
-    };
-  };
-
+  # Standard Networking & Time
   networking.hostName = "sdnixos";
   networking.networkmanager.enable = true;
-
   time.timeZone = "Europe/Warsaw";
 
+  # Login Manager 
   services.displayManager.ly = {
     enable = true;
     settings = {
-      # 0: none, 1: doom, 2: matrix, 3: arcade
       animation = "matrix";
-      
-      # Hide the borders around the box?
       hide_borders = false;
-      # Save the last username used?
       save = true;
     };
   };
- # SYSTEM-WIDE ADBLOCK 
- networking.extraHosts =
+
+  # Adblock
+  networking.extraHosts =
     let
       hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
-        sha256 = "sha256-vCANoAZVFFiaYvnJa9cHnhoIGm+n5G2Tk8m/VHGa1kc=";
+        sha256 = "sha256-cGioMzR4N7bemQDf/+yvumevMD/w8nYBhNy1T+zB8PI=";
       };
   in builtins.readFile hostsFile; 
 
+  # Window Manager & Input
   services.xserver = {
     enable = true;
     autoRepeatDelay = 200;
@@ -108,51 +78,21 @@
   };
 
   virtualisation.docker.enable = true;
-
   services.picom.enable = true;
 
-  # --- POWER MANAGEMENT ---
-  services.logind = {
-    lidSwitch = "suspend-then-hibernate";
-    extraConfig = ''
-      HandlePowerKey=suspend-then-hibernate
-      IdleAction=suspend-then-hibernate
-      IdleActionSec=30m
-    '';
-  };
-
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=1h
-  '';
-
-  # --- SPURIOUS WAKEUP FIX ---
-  systemd.services.fix-macbook-wakeup = {
-    enable = true;
-    description = "Disable spurious wakeups on MacBook";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "fix-wakeup" ''
-        grep -q "XHC1.*enabled" /proc/acpi/wakeup && echo XHC1 > /proc/acpi/wakeup || true
-        grep -q "LID0.*enabled" /proc/acpi/wakeup && echo LID0 > /proc/acpi/wakeup || true
-      '';
-    };
-  };
-
-  # --- LOCKING (SLOCK) ---
-
+  # Screen Locking
   programs.slock.enable = true;
-
   nixpkgs.overlays = [
     (self: super: {
       slock = super.slock.overrideAttrs (oldAttrs: {
         postPatch = ''
           sed -i '/chmod/d' Makefile
         '';
-        configFile = ./config/slock/config.h;
-        preConfigure = ''
-          cp $configFile config.def.h
-        '';
+        # Assuming you have this file, otherwise comment the next 3 lines out
+        # configFile = ./config/slock/config.h;
+        # preConfigure = ''
+        #   cp $configFile config.def.h
+        # '';
       });
     })
   ];
@@ -162,21 +102,19 @@
     lockerCommand = "${pkgs.slock}/bin/slock";
   };
 
+  # Users & Packages
   users.users.sdmnix = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "docker" ];
-    packages = with pkgs; [
-      tree
-    ];
+    packages = with pkgs; [ tree ];
   };
 
   programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    alacritty
+    vim wget git alacritty
+    zed-editor
+    #inputs.zen-browser.packages."${pkgs.system}".specific
   ];
 
   fonts.packages = with pkgs; [

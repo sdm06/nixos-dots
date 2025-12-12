@@ -14,6 +14,7 @@
     btop            # Process monitor
     upower          # Battery info
     libnotify       # Notifications
+    osd-brightness
     xclip           # Clipboard engine
     brightnessctl   # Brightness control
     pamixer         # Volume control
@@ -30,6 +31,7 @@
     
     # --- Development & Cloud ---
     gcc             # C Compiler (Needed for Nvim Treesitter)
+    gdb
     gnumake
     docker
     docker-compose
