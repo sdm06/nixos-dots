@@ -3,42 +3,52 @@
 {
   home.packages = with pkgs; [
     # --- GUI & Desktop ---
-    rofi
-    xwallpaper
-    picom
-    pavucontrol
+    pavucontrol       # Volume Control GUI
     librewolf
-    zed-editor
 
+    # --- Sway Essentials ---
+    swaylock          # Lock screen
+    swayidle          # Auto-lock logic
+    wl-clipboard      # Clipboard (wl-copy, wl-paste)
+    grim              # Screenshot tool
+    slurp             # Screenshot area selector
+    mako              # Notification daemon
+    i3status-rust
+    
     # --- System Utilities ---
-    btop            # Process monitor
-    upower          # Battery info
-    libnotify       # Notifications
-    osd-brightness
-    xclip           # Clipboard engine
-    brightnessctl   # Brightness control
-    pamixer         # Volume control
-    maim            # Screenshots
-    haskellPackages.greenclip # Clipboard manager
-    nitch
-    eza
+    btop              # Process monitor
+    upower            # Battery info
+    libnotify         # Notification sender
+    brightnessctl     # Brightness control (Moved from System)
+    pamixer           # Volume control (Moved from System)
+    nitch             # System fetch tool
+    eza               # Better 'ls'
 
     # --- CLI Tools ---
-    ripgrep         # Fast grep (needed by Nvim too, but useful generally)
-    fd              # Fast find (needed by Nvim too)
-    fzf             # Fuzzy finder
+    ripgrep           # Fast grep
+    fd                # Fast find
+    fzf               # Fuzzy finder
     tree
     
     # --- Development & Cloud ---
-    gcc             # C Compiler (Needed for Nvim Treesitter)
+    gcc               # C Compiler
     gdb
+    openssl
     gnumake
     docker
     docker-compose
     lazydocker
     lazygit
-    nodejs          # Needed for Nvim Copilot/Lazy/servers
+    nodejs
     terraform
     rust-analyzer
+
+    # --- X11 / Unused (Commented Out) ---
+    # rofi
+    # xwallpaper
+    # picom
+    # xclip
+    # maim
+    # haskellPackages.greenclip
   ];
 }

@@ -4,8 +4,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./modules/suckless.nix
-      ./modules/oxwm.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -14,11 +12,11 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # Hardware Support
+  # --- HARDWARE SUPPORT ---
   hardware.facetimehd.enable = true;
   hardware.graphics.enable = true; 
 
-  # --- POWER MANAGEMENT  ---
+  # --- POWER MANAGEMENT ---
   services.logind = {
     lidSwitch = "suspend";
     lidSwitchExternalPower = "suspend";
@@ -40,7 +38,7 @@
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Warsaw";
 
-  # Login Manager 
+  # --- LOGIN MANAGER (Ly) ---
   services.displayManager.ly = {
     enable = true;
     settings = {
@@ -50,75 +48,55 @@
     };
   };
 
-  # Adblock
+  # --- WINDOW MANAGER: SWAY ---
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+
+  # Required for Sway to access hardware and show dialogs
+  security.polkit.enable = true;
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
+  # Enable PAM for swaylock (so it accepts your password)
+  security.pam.services.swaylock = {};
+
+  # --- VIRTUALISATION ---
+  virtualisation.docker.enable = true;
+
+  # --- ADBLOCK ---
   networking.extraHosts =
     let
-      hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
+      hostsPath = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
         sha256 = "sha256-cGioMzR4N7bemQDf/+yvumevMD/w8nYBhNy1T+zB8PI=";
       };
-  in builtins.readFile hostsFile; 
+    in builtins.readFile hostsFile; 
 
-  # Window Manager & Input
-  services.xserver = {
-    enable = true;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-    windowManager.qtile.enable = true;
-  };
-    
-  services.libinput = {
-      enable = true;
-      touchpad = {
-        tapping = true;
-        naturalScrolling = false;
-        disableWhileTyping = true;
-      };
-  };
-
-  virtualisation.docker.enable = true;
-  services.picom.enable = true;
-
-  # Screen Locking
-  programs.slock.enable = true;
-  nixpkgs.overlays = [
-    (self: super: {
-      slock = super.slock.overrideAttrs (oldAttrs: {
-        postPatch = ''
-          sed -i '/chmod/d' Makefile
-        '';
-        # Assuming you have this file, otherwise comment the next 3 lines out
-        # configFile = ./config/slock/config.h;
-        # preConfigure = ''
-        #   cp $configFile config.def.h
-        # '';
-      });
-    })
-  ];
-
-  programs.xss-lock = {
-    enable = true;
-    lockerCommand = "${pkgs.slock}/bin/slock";
-  };
-
-  # Users & Packages
+  # --- USERS ---
   users.users.sdmnix = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
     packages = with pkgs; [ tree ];
   };
 
-  programs.firefox.enable = true;
-
+  # --- SYSTEM PACKAGES ---
   environment.systemPackages = with pkgs; [
-    vim wget git alacritty
-    zed-editor
-    #inputs.zen-browser.packages."${pkgs.system}".specific
+    vim
+    wget
+    git 
+    foot
   ];
 
+  # --- FONTS ---
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

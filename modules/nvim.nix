@@ -1,29 +1,36 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ...}:
 
 {
-  # 1. Install Neovim Dependencies (LSPs, Formatters)
+  # Install Neovim and dependencies
   home.packages = with pkgs; [
-    # Nix Support
-    nil             # Nix Language Server
-    nixpkgs-fmt     # Nix Formatter
+    # Tools required for Telescope
+    ripgrep
+    fd
+    fzf
 
-    # Lua Support (for editing your nvim config)
+    # Language Servers
     lua-language-server
-    stylua
+    nil # nix language server
+    nixpkgs-fmt # nix formatter
 
-    # Terraform / IaC Support
-    terraform-ls
-    tflint
+    # Needed for lazy.nvim
+    nodejs
+    gcc
   ];
 
-  # 2. Enable Neovim
   programs.neovim = {
     enable = true;
 #   viAlias = true;
 #   vimAlias = true;
-    defaultEditor = true;
 
-    # We leave 'plugins' empty so you can use lazy.nvim 
-    # to manage them inside your ~/.config/nvim/init.lua
+    # optional: If you want to manage your plugins with nix, instead of with lazy.nvim,
+    # you can do it with the plugins key.
+    # plugins = with pkgs.vimPlugins; [
+    #     telescope-nvim
+    #     nvim-treesitter
+    #     nvim-lspconfig
+    #     # Any other packages you want pinned at.
+    # ];
   };
+
 }
