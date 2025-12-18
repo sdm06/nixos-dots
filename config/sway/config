@@ -1,5 +1,5 @@
 # ==============================================================================
-#  SWAY CONFIGURATION - TOKYO NIGHT
+#  SWAY CONFIGURATION - TOKYO NIGHT (Minimalist MacBook Setup)
 # ==============================================================================
 
 # --- VARIABLES ----------------------------------------------------------------
@@ -16,25 +16,30 @@ set $black  #414868
 set $green  #9ece6a
 set $yellow #e0af68
 
+# --- LOCK & IDLE CONFIGURATION ------------------------------------------------
+set $lock swaylock -f -c 1a1b26
+
+exec swayidle -w \
+    timeout 900 $lock \
+    timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+    before-sleep $lock
+
 # --- OUTPUT -------------------------------------------------------------------
-# 1.5 is a good balance for HiDPI. Try 1 or 2 if this looks wrong.
 output * scale 1.5
 output * bg ~/nixos-dotfiles/walls/nix-wallpaper-gear.png fill
 
 # --- APPEARANCE ---------------------------------------------------------------
-font pango:FiraCode Nerd Font 11
+font pango:JetBrainsMono Nerd Font 11
 
-# Borders
 default_border pixel 2
 default_floating_border pixel 2
 
-# Window Colors        Border  Background Text    Indicator Child Border
-client.focused         $blue   $blue      $bg     $red      $blue
-client.focused_inactive $black  $black     $fg     $black    $black
-client.unfocused       $bg     $bg        $fg     $bg       $bg
-client.urgent          $red    $red       $bg     $red      $red
+# Window Colors        Border    Background Text       Indicator Child Border
+client.focused         $blue    $blue      $bg        $red      $blue
+client.focused_inactive $black  $black     $fg        $black    $black
+client.unfocused       $bg      $bg        $fg        $bg       $bg
+client.urgent          $red     $red       $bg        $red      $red
 
-# Gaps
 gaps inner 8
 gaps outer 2
 
@@ -45,13 +50,16 @@ input type:touchpad {
     natural_scroll enabled
 }
 
+input * {
+    xkb_layout "us,pl"
+    xkb_options "grp:alt_shift_toggle"
+}
+
 # --- KEYBINDINGS --------------------------------------------------------------
-# Apps
 bindsym $mod+Return exec $term
 bindsym $mod+d      exec $menu
 bindsym $mod+b      exec librewolf
 
-# Window Management
 bindsym $mod+q      kill
 bindsym $mod+f      fullscreen
 bindsym $mod+s      layout stacking
@@ -59,13 +67,11 @@ bindsym $mod+w      layout tabbed
 bindsym $mod+e      layout toggle split
 bindsym $mod+Shift+space floating toggle
 
-# Focus (Vim style)
+# Focus & Move (Vim style)
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-
-# Move (Vim style)
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
@@ -85,41 +91,58 @@ bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 
 # --- SYSTEM & HARDWARE --------------------------------------------------------
-# Reload / Exit
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit?' -b 'Yes' 'swaymsg exit'
 
-# Audio
-bindsym XF86AudioRaiseVolume exec pamixer -i 5
-bindsym XF86AudioLowerVolume exec pamixer -d 5
-bindsym XF86AudioMute        exec pamixer -t
+set $mode_system System: (l)ock, (e)xit, (s)uspend, (r)eboot, (S)hutdown
+mode "$mode_system" {
+    bindsym l exec $lock, mode "default"
+    bindsym e exec swaymsg exit, mode "default"
+    bindsym s exec systemctl suspend, mode "default"
+    bindsym r exec systemctl reboot, mode "default"
+    bindsym Shift+s exec systemctl poweroff -i, mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+e mode "$mode_system"
 
-# Brightness
-bindsym XF86MonBrightnessUp   exec brightnessctl set +10%
-bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+# Clipboard
+bindsym $mod+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy
 
-# Screenshots (Saved to clipboard)
+# --- MACBOOK MEDIA KEYS (SwayOSD) ---------------------------------------------
+
+# Volume
+bindsym XF86AudioRaiseVolume exec swayosd-client --output-volume raise
+bindsym XF86AudioLowerVolume exec swayosd-client --output-volume lower
+bindsym XF86AudioMute        exec swayosd-client --output-volume mute-toggle
+
+# Screen Brightness
+bindsym XF86MonBrightnessUp   exec swayosd-client --brightness raise
+bindsym XF86MonBrightnessDown exec swayosd-client --brightness lower
+
+# Keyboard Backlight
+bindsym XF86KbdBrightnessUp   exec swayosd-client --brightness raise --device "smc::kbd_backlight"
+bindsym XF86KbdBrightnessDown exec swayosd-client --brightness lower --device "smc::kbd_backlight"
+
+# --- SCREENSHOTS --------------------------------------------------------------
+bindsym $mod+p       exec grim - | wl-copy
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
-bindsym Print        exec grim - | wl-copy
 
 # --- AUTOSTART ----------------------------------------------------------------
 exec mako
 exec wl-paste --watch cliphist store
+exec swayosd-server
 
-# --- BAR------------------------------------------------
+# --- BAR ----------------------------------------------------------------------
 bar {
-    # Point to the custom config we just made
-    status_command i3status -c ~/nixos-dotfiles/config/i3status/config
-    
+    status_command i3status -c /home/sdmnix/.config/i3status/config
     position top
-    font pango:FiraCode Nerd Font 12
+    font pango:JetBrainsMono Nerd Font 12
 
     colors {
         background #1a1b26
         statusline #c0caf5
         separator  #7aa2f7
 
-        # Border  Background  Text
         focused_workspace  #7aa2f7 #7aa2f7 #1a1b26
         active_workspace   #1a1b26 #1a1b26 #c0caf5
         inactive_workspace #1a1b26 #1a1b26 #565f89

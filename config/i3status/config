@@ -1,5 +1,3 @@
-# ~/nixos-dotfiles/config/i3status/config
-
 general {
     colors = true
     interval = 5
@@ -20,7 +18,6 @@ disk "/" {
 }
 
 wireless _first_ {
-    # Changed: Shows Wifi Icon + Signal Strength (e.g., " 95%")
     format_up = "  %quality "
     format_down = "  down "
 }
@@ -37,9 +34,9 @@ memory {
 
 battery all {
     integer_battery_capacity = true
-    format = "%status %percentage "
-    status_chr = "⚡"
-    status_bat = " "
+    format = " %status %percentage "
+    status_chr = " ▲"
+    status_bat = " ▼"
     status_unk = "?"
     path = "/sys/class/power_supply/BAT%d/uevent"
     low_threshold = 20

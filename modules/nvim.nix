@@ -1,36 +1,46 @@
-{ config, pkgs, lib, ...}:
+{ pkgs, ... }:
 
 {
-  # Install Neovim and dependencies
+  # --- 1. SET EDITOR ENV VARS ---
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
+  # --- 2. SHELL ALIASES ---
+  # Since we are not using programs.neovim, we add aliases manually
+  home.shellAliases = {
+#   vi = "nvim";
+#   vim = "nvim";
+  };
+
+  # --- 3. PACKAGES ---
   home.packages = with pkgs; [
-    # Tools required for Telescope
+    # Search & Tools
     ripgrep
     fd
     fzf
-
-    # Language Servers
-    lua-language-server
-    nil # nix language server
-    nixpkgs-fmt # nix formatter
-
-    # Needed for lazy.nvim
-    nodejs
     gcc
+    nodejs
+
+    # LSPs & Formatters
+    lua-language-server
+    nil
+    nixpkgs-fmt
+
+    # Image Support: Binary Tools
+    imagemagick
+    ueberzugpp 
+
+    # --- THE MAGIC PART ---
+    # We install Neovim as a package, NOT a program module.
+    # We "override" it to inject the Magick Lua library.
+    # This gives you the dependency without touching your config files.
+    (neovim.override {
+      extraLuaPackages = ps: [ ps.magick ];
+    })
   ];
 
-  programs.neovim = {
-    enable = true;
-#   viAlias = true;
-#   vimAlias = true;
-
-    # optional: If you want to manage your plugins with nix, instead of with lazy.nvim,
-    # you can do it with the plugins key.
-    # plugins = with pkgs.vimPlugins; [
-    #     telescope-nvim
-    #     nvim-treesitter
-    #     nvim-lspconfig
-    #     # Any other packages you want pinned at.
-    # ];
-  };
-
+  # DISABLE the module so it doesn't try to write init.lua
+  programs.neovim.enable = false;
 }

@@ -23,7 +23,7 @@
       # --- SIXEL SUPPORT (For Foot) ---
       preview = {
         image_filter = "lanczos3";
-        image_quality = 75;
+        image_quality = 90;
         sixel_fraction = 15;
       };
     };
