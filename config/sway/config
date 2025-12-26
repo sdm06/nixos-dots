@@ -26,7 +26,7 @@ exec swayidle -w \
 
 # --- OUTPUT -------------------------------------------------------------------
 output * scale 1.5
-output * bg ~/nixos-dotfiles/walls/nix-wallpaper-gear.png fill
+output * bg ~/nixos-dotfiles/walls/nix-wallpaper-dracula.png fill
 
 # --- APPEARANCE ---------------------------------------------------------------
 font pango:JetBrainsMono Nerd Font 11
@@ -35,13 +35,13 @@ default_border pixel 2
 default_floating_border pixel 2
 
 # Window Colors        Border    Background Text       Indicator Child Border
-client.focused         $blue    $blue      $bg        $red      $blue
+client.focused         $fg    $fg      $fg        $fg      $fg
 client.focused_inactive $black  $black     $fg        $black    $black
-client.unfocused       $bg      $bg        $fg        $bg       $bg
-client.urgent          $red     $red       $bg        $red      $red
+client.unfocused       $black      $black        $black        $black       $black
+client.urgent          $bg     $fg       $bg        $fg      $fg
 
-gaps inner 8
-gaps outer 2
+gaps inner 10
+gaps outer 5
 
 # --- INPUT --------------------------------------------------------------------
 input type:touchpad {
@@ -51,7 +51,7 @@ input type:touchpad {
 }
 
 input * {
-    xkb_layout "us,pl"
+    xkb_layout "us,ua"
     xkb_options "grp:alt_shift_toggle"
 }
 
@@ -131,6 +131,9 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 exec mako
 exec wl-paste --watch cliphist store
 exec swayosd-server
+# --- Fix Screen Sharing ---
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
 # --- BAR ----------------------------------------------------------------------
 bar {
@@ -141,9 +144,9 @@ bar {
     colors {
         background #1a1b26
         statusline #c0caf5
-        separator  #7aa2f7
+        separator  #f9f9f9
 
-        focused_workspace  #7aa2f7 #7aa2f7 #1a1b26
+        focused_workspace  #7aa2f7 #c0caf5 #1a1b26
         active_workspace   #1a1b26 #1a1b26 #c0caf5
         inactive_workspace #1a1b26 #1a1b26 #565f89
         urgent_workspace   #f7768e #f7768e #1a1b26

@@ -4,9 +4,12 @@
   home.packages = with pkgs; [
     # --- GUI & Desktop ---
     librewolf
+    
 
     # --- Sway Essentials ---
     swaylock          # Lock screen
+    slurp
+    xdg-desktop-portal-wlr
     swayidle          # Auto-lock logic
     wl-clipboard      # Clipboard (wl-copy, wl-paste)
     cliphist          # <--- ADDED: Required for clipboard history
@@ -43,6 +46,8 @@
     
     # --- Development & Cloud ---
     gcc               # C Compiler
+    cargo
+    rustc
     gdb
     openssl
     gnumake

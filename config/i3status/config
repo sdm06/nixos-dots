@@ -10,7 +10,7 @@ order += "disk /"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "memory"
-order += "battery all"
+order += "battery 0"
 order += "tztime local"
 
 disk "/" {
@@ -32,13 +32,17 @@ memory {
     threshold_degraded = "1G"
 }
 
-battery all {
+battery 0 {
     integer_battery_capacity = true
     format = " %status %percentage "
     status_chr = " ▲"
     status_bat = " ▼"
     status_unk = "?"
-    path = "/sys/class/power_supply/BAT%d/uevent"
+    
+    path = "/sys/class/power_supply/BAT0/uevent"
+    
+    last_full_capacity = true
+    
     low_threshold = 20
 }
 

@@ -19,6 +19,7 @@
   hardware.facetimehd.enable = true;
   hardware.graphics.enable = true; 
   programs.dconf.enable = true;
+  services.pipewire.enable = true;
 
   # --- Bluetooth ---
   hardware.bluetooth.enable = true; 
@@ -44,6 +45,24 @@
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Warsaw";
 
+  xdg.portal = {
+  enable = true;
+  wlr.enable = true;
+  # GTK portal is needed for the "Select Screen" menu to appear
+  extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  
+  # CRITICAL: Force 'wlr' for screen sharing. 
+  # Without this, it defaults to 'gtk' which cannot record Sway screens.
+  config = {
+    common = {
+      default = [ "wlr" ];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ]; # Optional, keeps logins saved
+    };
+  };
+};
+# Ensure DBus is working correctly
+  services.dbus.enable = true;
+
   # --- Display Manager ---
   services.displayManager.ly = {
     enable = true;
@@ -58,12 +77,7 @@
 
   # --- Security & Permissions ---
   security.polkit.enable = true;
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
+  
   # --- SwayOSD Setup ---
   services.udev.packages = with pkgs; [ swayosd ];
 
@@ -78,7 +92,7 @@
       hostsPath = "https://raw.githubusercontent.com/stevenblack/hosts/master/hosts";
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
-        sha256 = "sha256-biEe3tsPFk2MADjtTmA8sohCwiqaRdfQZbAe+pYDUB0=";
+        sha256 = "sha256-j0lJ+v2ICBOkL/1E06vkU1jyCFU7kcLDUPY/DYexVpo=";
       };
     in builtins.readFile hostsFile; 
 
