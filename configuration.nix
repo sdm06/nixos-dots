@@ -77,14 +77,13 @@
 
   # --- Security & Permissions ---
   security.polkit.enable = true;
-  
-  # --- SwayOSD Setup ---
   services.udev.packages = with pkgs; [ swayosd ];
 
-  security.pam.services.swaylock = {};
+
   
   # --- Virtualisation ---
   virtualisation.docker.enable = true;
+  security.pam.services.swaylock = {};
 
   # --- Adblock ---
   networking.extraHosts =
@@ -104,7 +103,7 @@
 
   # --- System Packages ---
   environment.systemPackages = with pkgs; [
-    vim wget git foot swayosd brightnessctl papirus-icon-theme
+    vim wget git foot brightnessctl papirus-icon-theme
   ];
 
   # --- Fonts ---

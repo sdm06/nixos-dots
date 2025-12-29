@@ -18,7 +18,6 @@
     mako              # Notification daemon
     i3status
     wofi
-    swayosd
     
     # --- System Utilities ---
     htop
@@ -43,6 +42,7 @@
     poppler            # PDF thumbnails
     jq                 # JSON previews
     zoxide
+    starship
     
     # --- Development & Cloud ---
     gcc               # C Compiler

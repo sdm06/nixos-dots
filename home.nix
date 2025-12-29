@@ -12,36 +12,9 @@ let
     btop = "btop";
     foot = "foot";
     i3status = "i3status";
+    swayosd = "swayosd";
   };
 
-  # --- TOKYO NIGHT MINIMALIST CSS ---
-  tokyonight-osd-style = ''
-    window#osd {
-      background-color: rgba(26, 27, 38, 0.90);
-      border: 1px solid rgba(122, 162, 247, 0.6);
-      border-radius: 99px; /* Pill shape */
-    }
-    #container {
-      padding: 18px 24px;
-    }
-    image {
-      color: #7aa2f7;
-      min-width: 32px;
-      min-height: 32px;
-      margin-right: 12px;
-    }
-    progressbar, progress, trough {
-      min-width: 180px;
-      min-height: 6px;
-      border-radius: 3px;
-      background-color: #292e42;
-      border: none;
-    }
-    highlight {
-      background-color: #7aa2f7;
-      border-radius: 3px;
-    }
-  '';
 in
 
 {
@@ -62,13 +35,18 @@ in
   home.stateVersion = "25.05";
   programs.git.enable = true;
 
+  services.swayosd = {
+    enable = true;
+  };
+
   # --- PACKAGES ---
   home.packages = with pkgs; [
     papirus-icon-theme
     tokyo-night-gtk
-    swayosd
   ];
-
+  systemd.user.services.swayosd.Service.Environment = lib.mkForce [ 
+    "GTK_THEME=Adwaita" 
+  ];
   # --- GTK THEME CONFIGURATION ---
   gtk = {
     enable = true;
@@ -76,24 +54,19 @@ in
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    theme = {
-      name = "TokyoNight-Storm";
-      package = pkgs.tokyo-night-gtk;
-    };
+   #theme = {
+   #  name = "TokyoNight-Storm";
+   #  package = pkgs.tokyo-night-gtk;
+   #};
   };
 
   # --- DOTFILES & CONFIG LINKING (FIXED) ---
-  # We merge the symlinks map with the manual CSS file entry
-  xdg.configFile = (builtins.mapAttrs
+  xdg.configFile = builtins.mapAttrs
     (name: subpath: {
       source = create_symlink "${dotfiles}/${subpath}";
       recursive = true;
     })
-    configs) // {
-      # This adds the SwayOSD style to the config set
-      "swayosd/style.css".text = tokyonight-osd-style;
-    };
-
+    configs;
   # --- VIM LEGACY LINKING (.vimrc) ---
   home.file.".vim" = {
     source = create_symlink "${dotfiles}/vim";
@@ -107,7 +80,6 @@ in
     _JAVA_AWT_WM_NONREPARENTING = "1";
     GTK_THEME = "TokyoNight-Storm";
     XDG_CURRENT_DESKTOP = "sway";
-
   };
 
   # --- CURSOR THEME ---

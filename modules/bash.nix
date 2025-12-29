@@ -13,6 +13,10 @@
     enable = true;
     enableBashIntegration = true;
   };
+  programs.starship = {
+    enable = true;
+    enableBashIntegration = true;
+  };
 
   programs.bash = {
     enable = true;
@@ -53,6 +57,7 @@
       zt = "zig test";
     };
 
+
     # --- ENV VARS & CUSTOM COMMANDS ---
 initExtra = ''
       export PATH="$HOME/.emacs.d/bin:$PATH"
@@ -68,17 +73,18 @@ initExtra = ''
       export PS1="\[\e[38;5;75m\]\u@\h \[\e[38;5;113m\]\w \[\e[38;5;189m\]\$ \[\e[0m\]"
 
       # --- ROBUST TMUX AUTO-START ---
-      if [[ $- == *i* ]]; then
-         # 2. Check if we are NOT already in tmux
-         if [[ -z "$TMUX" ]]; then
-         # 3. Check if we are NOT in a specific IDE terminal (VS Code, IntelliJ, etc.)
-          if [[ "$TERM_PROGRAM" != "vscode" ]] && [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]]; then
-            # 4. Create a NEW independent session for this window
-            exec tmux new-session
-          fi
-         fi
-        fi
-      # Run system fetch (Only runs inside the tmux pane or non-tmux shells)
+#     if [[ $- == *i* ]]; then
+#        # 2. Check if we are NOT already in tmux
+#        if [[ -z "$TMUX" ]]; then
+#        # 3. Check if we are NOT in a specific IDE terminal (VS Code, IntelliJ, etc.)
+#         if [[ "$TERM_PROGRAM" != "vscode" ]] && [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]]; then
+#           # 4. Create a NEW independent session for this window
+#           exec tmux new-session
+#         fi
+#        fi
+#       fi
+#     # Run system fetch (Only runs inside the tmux pane or non-tmux shells)
       nitch
     '';  };
+
 }

@@ -110,19 +110,27 @@ bindsym $mod+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-co
 
 # --- MACBOOK MEDIA KEYS (SwayOSD) ---------------------------------------------
 
-# Volume
-bindsym XF86AudioRaiseVolume exec swayosd-client --output-volume raise
-bindsym XF86AudioLowerVolume exec swayosd-client --output-volume lower
-bindsym XF86AudioMute        exec swayosd-client --output-volume mute-toggle
+# Screen Brightness (F1 = Lower, F2 = Raise)
+# Binds both the "Function" key and the "Media" key so it works either way
+bindsym --locked XF86MonBrightnessDown exec swayosd-client --brightness lower
+bindsym --locked XF86MonBrightnessUp   exec swayosd-client --brightness raise
+bindsym --locked F1                    exec swayosd-client --brightness lower
+bindsym --locked F2                    exec swayosd-client --brightness raise
 
-# Screen Brightness
-bindsym XF86MonBrightnessUp   exec swayosd-client --brightness raise
-bindsym XF86MonBrightnessDown exec swayosd-client --brightness lower
+# Keyboard Backlight (F5 = Lower, F6 = Raise)
+# NOTE: "smc::kbd_backlight" is for Intel Macs. If it doesn't work, try removing --device entirely.
+bindsym --locked XF86KbdBrightnessDown exec swayosd-client --brightness lower --device "smc::kbd_backlight"
+bindsym --locked XF86KbdBrightnessUp   exec swayosd-client --brightness raise --device "smc::kbd_backlight"
+bindsym --locked F5                    exec swayosd-client --brightness lower --device "smc::kbd_backlight"
+bindsym --locked F6                    exec swayosd-client --brightness raise --device "smc::kbd_backlight"
 
-# Keyboard Backlight
-bindsym XF86KbdBrightnessUp   exec swayosd-client --brightness raise --device "smc::kbd_backlight"
-bindsym XF86KbdBrightnessDown exec swayosd-client --brightness lower --device "smc::kbd_backlight"
-
+# Volume (F10 = Mute, F11 = Lower, F12 = Raise)
+bindsym --locked XF86AudioMute         exec swayosd-client --output-volume mute-toggle
+bindsym --locked XF86AudioLowerVolume  exec swayosd-client --output-volume lower
+bindsym --locked XF86AudioRaiseVolume  exec swayosd-client --output-volume raise
+bindsym --locked F10                   exec swayosd-client --output-volume mute-toggle
+bindsym --locked F11                   exec swayosd-client --output-volume lower
+bindsym --locked F12                   exec swayosd-client --output-volume raise
 # --- SCREENSHOTS --------------------------------------------------------------
 bindsym $mod+p       exec grim - | wl-copy
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
@@ -130,7 +138,6 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 # --- AUTOSTART ----------------------------------------------------------------
 exec mako
 exec wl-paste --watch cliphist store
-exec swayosd-server
 # --- Fix Screen Sharing ---
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
