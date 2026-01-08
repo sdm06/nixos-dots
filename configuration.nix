@@ -26,17 +26,17 @@
   hardware.bluetooth.powerOnBoot = true;
 
   # --- Power Management ---
-  services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchExternalPower = "suspend";
-    extraConfig = ''
-      HandlePowerKey=suspend
-      HandleLidSwitch=suspend
-      HandleLidSwitchExternalPower=suspend
-      IdleAction=suspend
-      IdleActionSec=30m
-    '';
-  };
+ #services.Logind = {
+ #  lidSwitch = "suspend";
+ #  lidSwitchExternalPower = "suspend";
+ #  extraConfig = ''
+ #    HandlePowerKey=suspend
+ #    HandleLidSwitch=suspend
+ #    HandleLidSwitchExternalPower=suspend
+ #    IdleAction=suspend
+ #    IdleActionSec=30m
+ #  '';
+ #};
 
   networking.networkmanager.wifi.powersave = false;
 
@@ -73,6 +73,12 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
+  };
+
+  # --- OXWM ---
+  services.xserver = {
+    enable = true;
+    windowManager.oxwm.enable = true;
   };
 
   # --- Security & Permissions ---

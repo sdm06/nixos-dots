@@ -33,6 +33,7 @@
 
     # --- CLI Tools ---
     ripgrep           # Fast grep
+    zig
     fd                # Fast find
     fzf               # Fuzzy finder
     tree
@@ -43,6 +44,7 @@
     jq                 # JSON previews
     zoxide
     starship
+    bash-completion
     
     # --- Development & Cloud ---
     gcc               # C Compiler

@@ -42,7 +42,7 @@ in
   # --- PACKAGES ---
   home.packages = with pkgs; [
     papirus-icon-theme
-    tokyo-night-gtk
+    #tokyo-night-gtk
   ];
   systemd.user.services.swayosd.Service.Environment = lib.mkForce [ 
     "GTK_THEME=Adwaita" 
@@ -56,7 +56,7 @@ in
     };
    #theme = {
    #  name = "TokyoNight-Storm";
-   #  package = pkgs.tokyo-night-gtk;
+  #  package = pkgs.tokyo-night-gtk;
    #};
   };
 
