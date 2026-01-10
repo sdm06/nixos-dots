@@ -1,18 +1,201 @@
-source ~/.vim/options.vim
-source ~/.vim/keybinds.vim
-source ~/.vim/plugins.vim
-source ~/.vim/colors.vim
-source ~/.vim/fzf.vim
-source ~/.vim/lightline.vim
-source ~/.vim/lsp.vim
+
+" --- 1. General Behavior ---
+set nocompatible
 filetype plugin indent on
-set expandtab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+syntax on
+set encoding=utf-8
+set mouse=a
+set hidden
+set backspace=indent,eol,start
+set history=1000
+
+" --- 2. UI & Visuals ---
 set number
 set relativenumber
+set cursorline
+set signcolumn=yes
+set scrolloff=8
+set laststatus=2
+set noshowmode
+set wildmenu
+set wildmode=longest:full,full
+set splitbelow
+set splitright
+set list
+set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+
+" --- 3. Indentation ---
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set autoindent
 set smartindent
-set showmatch
-set backspace=indent,eol,start
-syntax on
+
+" --- 4. Search & Project Navigation ---
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set magic
+set path+=** " Recursive search for :find
+
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%c:%m
+endif
+
+" --- 5. Swap/Backup Management ---
+let s:vimdir = expand("$HOME/.vim")
+if !isdirectory(s:vimdir) | call mkdir(s:vimdir, "p") | endif
+set directory=$HOME/.vim/swap//
+set backupdir=$HOME/.vim/backup//
+set undodir=$HOME/.vim/undodir//
+set undofile
+set nobackup
+set nowritebackup
+
+"  KEYBINDINGS (Leader = SPACE)
+let mapleader = " "
+
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
+nnoremap <Leader>x :x<CR>
+nnoremap <Leader>cd :Ex %:p:h<CR>
+
+" Window Navigation
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>l <C-w>l
+
+" Clear Search
+nnoremap <Leader>nh :nohlsearch<CR>
+nnoremap <Esc> :nohlsearch<CR>
+
+" Center screen on search results
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" --- FILE EXPLORER (Netrw) ---
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3     " Tree View
+let g:netrw_browse_split = 0
+let g:netrw_altv = 1
+let g:netrw_winsize = 20
+
+" <Space>e: Toggle Explorer on the Left
+" If a file is open, it opens the explorer in that file's directory
+nnoremap <Leader>e :Lexplore %:p:h<CR>
+
+" --- SEARCH TOOLS  ---
+" 1. Find File: Type name + Tab for autocomplete
+nnoremap <Leader>f :find *
+
+" 2. Grep Project
+command! -nargs=+ Grep execute 'silent grep! <args>' | copen
+nnoremap <Leader>g :Grep 
+
+" 3. Grep Word Under Cursor
+nnoremap <Leader>gw :execute 'grep! ' . expand('<cword>') . ' .' <Bar> copen<CR>
+
+" --- DEFINITIONS ---
+nnoremap gd <C-]>
+nnoremap <C-t> <C-t>
+
+"  THEME:
+set background=dark
+set t_Co=256
+if (has("termguicolors")) | set termguicolors | endif
+
+highlight clear
+if exists("syntax_on") | syntax reset | endif
+let g:colors_name = "onedark"
+
+" Base
+hi Normal       guifg=#abb2bf guibg=#282c34 ctermfg=145 ctermbg=235
+hi LineNr       guifg=#4b5263 guibg=#282c34 ctermfg=240 ctermbg=235
+hi CursorLine   guibg=#2c323c ctermbg=236 cterm=NONE
+hi CursorLineNr guifg=#61afef guibg=#282c34 ctermfg=75  ctermbg=235
+hi SignColumn   guibg=#282c34 ctermbg=235
+hi VertSplit    guifg=#181a1f guibg=#181a1f ctermfg=233 ctermbg=233
+hi Visual       guibg=#3e4452 ctermbg=237
+
+" Syntax
+hi Comment      guifg=#5c6370 ctermfg=59  cterm=italic
+hi Constant     guifg=#e5c07b ctermfg=180
+hi String       guifg=#98c379 ctermfg=114
+hi Identifier   guifg=#e06c75 ctermfg=168
+hi Function     guifg=#61afef ctermfg=75
+hi Statement    guifg=#c678dd ctermfg=176
+hi Type         guifg=#e5c07b ctermfg=180
+hi PreProc      guifg=#e5c07b ctermfg=180
+hi Search       guifg=#282c34 guibg=#e5c07b ctermfg=235 ctermbg=180
+hi Pmenu        guifg=#abb2bf guibg=#3e4452 ctermfg=145 ctermbg=237
+hi PmenuSel     guifg=#282c34 guibg=#61afef ctermfg=235 ctermbg=75
+hi SpecialKey   guifg=#3b4048 ctermfg=238
+
+"  POWERLINE STATUS BAR
+
+function! GetModeStr()
+    let l:m = mode()
+    if l:m ==# 'n'      | return ' NORMAL '  | endif
+    if l:m ==# 'i'      | return ' INSERT '  | endif
+    if l:m ==# 'v'      | return ' VISUAL '  | endif
+    if l:m ==# 'V'      | return ' V-LINE '  | endif
+    if l:m ==# "\<C-V>" | return ' V-BLOCK ' | endif
+    if l:m ==# 'R'      | return ' REPLACE ' | endif
+    return ' ' . l:m . ' '
+endfunction
+
+hi User3 guifg=#abb2bf guibg=#3e4452 ctermfg=145 ctermbg=237
+hi User4 guifg=#3e4452 guibg=#282c34 ctermfg=237 ctermbg=235
+hi User5 guifg=#3e4452 guibg=#282c34 ctermfg=237 ctermbg=235
+hi StatusLine guifg=#abb2bf guibg=#282c34 ctermfg=145 ctermbg=235 gui=NONE
+
+function! UpdateStatusColors(mode)
+    let l:green  = '#98c379'
+    let l:blue   = '#61afef'
+    let l:purple = '#c678dd'
+    let l:red    = '#e06c75'
+    let l:grey   = '#3e4452'
+    let l:dark   = '#282c34'
+
+    if a:mode == 'n'
+        let l:bg = l:green
+    elseif a:mode == 'i'
+        let l:bg = l:blue
+    elseif a:mode ==? 'v' || a:mode ==? "\<C-V>"
+        let l:bg = l:purple
+    elseif a:mode == 'R'
+        let l:bg = l:red
+    else
+        let l:bg = l:green
+    endif
+
+    exe 'hi User1 guifg=' . l:dark . ' guibg=' . l:bg . ' ctermfg=235 ctermbg=114 gui=bold'
+    exe 'hi User2 guifg=' . l:bg . ' guibg=' . l:grey . ' ctermfg=114 ctermbg=237'
+endfunction
+
+augroup PowerlineMode
+    autocmd!
+    autocmd InsertEnter * call UpdateStatusColors('i')
+    autocmd InsertLeave * call UpdateStatusColors('n')
+    autocmd ModeChanged * call UpdateStatusColors(mode())
+    autocmd VimEnter * call UpdateStatusColors('n')
+augroup END
+
+set statusline=
+set statusline+=%1*%{GetModeStr()}
+set statusline+=%2*
+set statusline+=%3*\ %f\ %m\ 
+set statusline+=%4*
+set statusline+=%*
+set statusline+=%=
+set statusline+=%5*
+set statusline+=%3*\ %y\ \|\ %l:%c\ \ 
+
+"  AUTOCOMPLETION
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+set completeopt=menuone,noinsert,noselect
