@@ -1,201 +1,238 @@
-
-" --- 1. General Behavior ---
-set nocompatible
-filetype plugin indent on
-syntax on
-set encoding=utf-8
-set mouse=a
-set hidden
-set backspace=indent,eol,start
-set history=1000
-
-" --- 2. UI & Visuals ---
+let mapleader = " "
 set number
 set relativenumber
-set cursorline
-set signcolumn=yes
-set scrolloff=8
-set laststatus=2
-set noshowmode
-set wildmenu
-set wildmode=longest:full,full
-set splitbelow
-set splitright
-set list
-set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
-
-" --- 3. Indentation ---
-set tabstop=4
+set tabstop=2 softtabstop=2
 set shiftwidth=4
-set softtabstop=4
 set expandtab
+set smarttab
 set autoindent
 set smartindent
-
-" --- 4. Search & Project Navigation ---
-set incsearch
-set hlsearch
-set ignorecase
+set autowrite
 set smartcase
-set magic
-set path+=** " Recursive search for :find
+set hidden
+set noerrorbells
+set nowrap
+set incsearch
+set nohlsearch
+set timeout
+set timeoutlen=300
+set updatetime=250
+set history=200
+set noshowmode
+set path+=**
+set laststatus=2
+set termguicolors
+colorscheme slate
+syntax on
 
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-    set grepformat=%f:%l:%c:%m
-endif
+let g:enable_trasparent = 0
+let g:show_os_icon = 0
 
-" --- 5. Swap/Backup Management ---
-let s:vimdir = expand("$HOME/.vim")
-if !isdirectory(s:vimdir) | call mkdir(s:vimdir, "p") | endif
-set directory=$HOME/.vim/swap//
-set backupdir=$HOME/.vim/backup//
-set undodir=$HOME/.vim/undodir//
-set undofile
-set nobackup
-set nowritebackup
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
 
-"  KEYBINDINGS (Leader = SPACE)
-let mapleader = " "
-
+nnoremap G Gzz
+nnoremap H Hzz
+nnoremap L Lzz
+nnoremap <leader>gd <C-]>
+nnoremap <leader>n :bnext<cr>
+nnoremap <leader>s :!ctags -R .
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>x :x<CR>
 nnoremap <Leader>cd :Ex %:p:h<CR>
 
-" Window Navigation
+inoremap <C-G> <C-X><C-N>
+inoremap <tab> <C-N>
+inoremap <s-tab> <C-P>
+
+nnoremap <silent> <leader>e <esc>:Lex 20<cr>
+
+nnoremap <silent> <leader>! :-1read $HOME/.vim/snippets/skeleton.html<cr>9jf<
+
+nnoremap <silent> <leader><space> :buffers<cr>
+
+inoremap <silent> { {}<esc>i
+inoremap <silent> [ []<esc>i
+inoremap <silent> ( ()<esc>i
+inoremap <silent> ` ``<esc>i
+inoremap <silent> ' ''<esc>i
+inoremap <silent> " ""<esc>i
+inoremap <silent> < <><esc>i
+
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 
-" Clear Search
-nnoremap <Leader>nh :nohlsearch<CR>
-nnoremap <Esc> :nohlsearch<CR>
-
-" Center screen on search results
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" --- FILE EXPLORER (Netrw) ---
 let g:netrw_banner = 0
-let g:netrw_liststyle = 3     " Tree View
-let g:netrw_browse_split = 0
 let g:netrw_altv = 1
-let g:netrw_winsize = 20
+let g:netrw_liststyle = 3
 
-" <Space>e: Toggle Explorer on the Left
-" If a file is open, it opens the explorer in that file's directory
-nnoremap <Leader>e :Lexplore %:p:h<CR>
+autocmd FileType javascript,javascriptreact,typescriptreact,typescript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
-" --- SEARCH TOOLS  ---
-" 1. Find File: Type name + Tab for autocomplete
-nnoremap <Leader>f :find *
+highlight netrwSymLink guifg=#c75ae8
+highlight netrwExe guifg=#8bcd5b
+highlight netrwPlain guifg=#93a4c3
+highlight netrwTreeBar guifg=#455574
+highlight netrwClassify guifg=#4fa6ed
+highlight vimEscape guifg=#dd9046
+highlight vimContinue guifg=#dd9046
+highlight vimFuncSID guifg=#dd9046
+highlight vimNotation guifg=#dd9046
+highlight CursorLineNR ctermfg=11 guifg=NONE guibg=#2a324a
+highlight CursorLine ctermfg=11 guifg=NONE guibg=#2a324a
+highlight Type guifg=#efbd5d
+highlight Comment guifg=#455574
+highlight StatusLine guibg=#a0a8b7 guifg=#1A212E
+highlight Question guifg=#cc9057
+highlight Directory guifg=#4fa6ed
+highlight IncSearch guibg=#d99a5e
+highlight MatchParen guibg=#2a324a guifg=NONE
+highlight PmenuSel guifg=#e55561
+highlight WildMenu guibg=#e55561
+highlight ErrorMsg guifg=#f65866
+highlight String guifg=#8bcd5b
+highlight Constant guifg=#34bfd0
+highlight Character guifg=#dd9046
+highlight Number guifg=#dd9046
+highlight Boolean guifg=#dd9046
+highlight Float guifg=#dd9046
+highlight Function guifg=#c75ae8
+highlight Identifier guifg=#f65866
+highlight Conditional guifg=#c75ae8
+highlight Statement guifg=#c75ae8
+highlight Repeat guifg=#c75ae8
+highlight Label guifg=#c75ae8
+highlight Operator guifg=#c75ae8
+highlight Keyword guifg=#c75ae8
+highlight Exception guifg=#c75ae8
+highlight Include guifg=#c75ae8
+highlight Define guifg=#c75ae8
+highlight Macro guifg=#f65866
+highlight Special guifg=#2a324a
+highlight Tag guifg=#8bcd5b
+highlight SpecialChar guifg=#f65866
+highlight Delimiter guifg=#6c7d9c
+highlight Visual ctermbg=242 guibg=#2a324a guifg=NONE
 
-" 2. Grep Project
-command! -nargs=+ Grep execute 'silent grep! <args>' | copen
-nnoremap <Leader>g :Grep 
+if g:enable_trasparent == 1
+    highlight Normal guifg=#93a4c3 ctermbg=NONE guibg=NONE
+    highlight VertSplit guifg=#2a324a guibg=NONE ctermbg=NONE
+    highlight EndOfBuffer guifg=#455574
+    highlight LineNr guifg=#93a4c3
+else
+    highlight Normal guibg=#1A212E guifg=#93a4c3
+    highlight VertSplit guifg=#2a324a guibg=#1A212E
+    highlight EndOfBuffer guifg=#1A212E
+    highlight LineNr guifg=#455574
+endif
 
-" 3. Grep Word Under Cursor
-nnoremap <Leader>gw :execute 'grep! ' . expand('<cword>') . ' .' <Bar> copen<CR>
+autocmd FileType javascript,typescript,javascriptreact,typescriptreact 
+    \ highlight Normal guifg=#93a4c3 |
+    \ highlight Special guifg=#c75ae8 |
+    \ highlight Identifier guifg=#c75ae8 |
+    \ highlight htmlTag guifg=#c75ae8 |
+    \ highlight link htmlTagName htmlTag |
+    \ highlight JavaScriptBraces guifg=#6c7d9c |
+    \ highlight link javaScriptParens JavascriptBraces |
+    \ highlight javaScriptValue guifg=#4fa6ed |
+    \ highlight Structure guifg=#e55561 |
+    \ highlight Type guifg=#efbd5d |
+    \ highlight PreProc guifg=#e55561 |
+    \ highlight link typescriptBraces JavascriptBraces |
+    \ highlight link typescriptParens JavascriptParens |
+    \ highlight typescriptObjectColon guifg=#ffffff |
+    \ highlight typescriptArrowFunc guifg=#93a4c3 |
+    \ highlight typescriptClassName guifg=#efbd5d |
+    \ highlight typescriptIdentifierName guifg=#93a4c3 |
+    \ highlight typescriptVariableDeclaration guifg=#4fa6ed |
+    \ highlight tsxEqual guifg=#93a4c3 |
+    \ highlight tsxTagName guifg=#efbd5d |
+    \ highlight typescriptFuncName guifg=#4fa6ed |
 
-" --- DEFINITIONS ---
-nnoremap gd <C-]>
-nnoremap <C-t> <C-t>
+highlight link htmlEndTag htmlTag
+highlight htmlH1 guifg=#93a4c3
+highlight htmlH2 guifg=#93a4c3
+highlight htmlH3 guifg=#93a4c3
+highlight htmlH4 guifg=#93a4c3
+highlight htmlH5 guifg=#93a4c3
+highlight htmlH6 guifg=#93a4c3
+highlight htmlArg guifg=#efbd5d
+highlight htmlTitle guifg=#93a4c3
 
-"  THEME:
-set background=dark
-set t_Co=256
-if (has("termguicolors")) | set termguicolors | endif
+highlight cssClassName guifg=#4fa6ed
+highlight cssClassNameDot guifg=#4fa6ed
+highlight cssIdentifier guifg=#4fa6ed
+highlight cssBraces guifg=#4fa6ed
+highlight cssProp guifg=#efbd5d
 
-highlight clear
-if exists("syntax_on") | syntax reset | endif
-let g:colors_name = "onedark"
+highlight Pmenu guifg=#4fa6ed guibg=#2a324a
+highlight PmenuSel guifg=#2a324a guibg=#4fa6ed
+highlight PmenuThumb guibg=#4fa6ed
+highlight PmenuSbar guibg=#1a324a
 
-" Base
-hi Normal       guifg=#abb2bf guibg=#282c34 ctermfg=145 ctermbg=235
-hi LineNr       guifg=#4b5263 guibg=#282c34 ctermfg=240 ctermbg=235
-hi CursorLine   guibg=#2c323c ctermbg=236 cterm=NONE
-hi CursorLineNr guifg=#61afef guibg=#282c34 ctermfg=75  ctermbg=235
-hi SignColumn   guibg=#282c34 ctermbg=235
-hi VertSplit    guifg=#181a1f guibg=#181a1f ctermfg=233 ctermbg=233
-hi Visual       guibg=#3e4452 ctermbg=237
-
-" Syntax
-hi Comment      guifg=#5c6370 ctermfg=59  cterm=italic
-hi Constant     guifg=#e5c07b ctermfg=180
-hi String       guifg=#98c379 ctermfg=114
-hi Identifier   guifg=#e06c75 ctermfg=168
-hi Function     guifg=#61afef ctermfg=75
-hi Statement    guifg=#c678dd ctermfg=176
-hi Type         guifg=#e5c07b ctermfg=180
-hi PreProc      guifg=#e5c07b ctermfg=180
-hi Search       guifg=#282c34 guibg=#e5c07b ctermfg=235 ctermbg=180
-hi Pmenu        guifg=#abb2bf guibg=#3e4452 ctermfg=145 ctermbg=237
-hi PmenuSel     guifg=#282c34 guibg=#61afef ctermfg=235 ctermbg=75
-hi SpecialKey   guifg=#3b4048 ctermfg=238
-
-"  POWERLINE STATUS BAR
-
-function! GetModeStr()
-    let l:m = mode()
-    if l:m ==# 'n'      | return ' NORMAL '  | endif
-    if l:m ==# 'i'      | return ' INSERT '  | endif
-    if l:m ==# 'v'      | return ' VISUAL '  | endif
-    if l:m ==# 'V'      | return ' V-LINE '  | endif
-    if l:m ==# "\<C-V>" | return ' V-BLOCK ' | endif
-    if l:m ==# 'R'      | return ' REPLACE ' | endif
-    return ' ' . l:m . ' '
-endfunction
-
-hi User3 guifg=#abb2bf guibg=#3e4452 ctermfg=145 ctermbg=237
-hi User4 guifg=#3e4452 guibg=#282c34 ctermfg=237 ctermbg=235
-hi User5 guifg=#3e4452 guibg=#282c34 ctermfg=237 ctermbg=235
-hi StatusLine guifg=#abb2bf guibg=#282c34 ctermfg=145 ctermbg=235 gui=NONE
-
-function! UpdateStatusColors(mode)
-    let l:green  = '#98c379'
-    let l:blue   = '#61afef'
-    let l:purple = '#c678dd'
-    let l:red    = '#e06c75'
-    let l:grey   = '#3e4452'
-    let l:dark   = '#282c34'
-
-    if a:mode == 'n'
-        let l:bg = l:green
-    elseif a:mode == 'i'
-        let l:bg = l:blue
-    elseif a:mode ==? 'v' || a:mode ==? "\<C-V>"
-        let l:bg = l:purple
-    elseif a:mode == 'R'
-        let l:bg = l:red
+fu! WhatMode()
+    if mode() == 'n'
+        highlight ModeMsg guibg=#6ECB63
+        return "NORMAL"
+    elseif mode() == 'i'
+        highlight ModeMsg guibg=#4fa6ed
+        return "INSERT"
+    elseif mode() == 'c'
+        highlight ModeMsg guibg=#efbd5d
+        return "COMMAND"
+    elseif mode() == 'R'
+        highlight ModeMsg guibg=#e55561
+        return "REPLACE"
+    elseif mode() == 'v'
+        highlight ModeMsg guibg=#bf68d9
+        return "VISUAL"
+    elseif mode() == 'V'
+        highlight ModeMsg guibg=#bf68d9
+        return "V-LINE"
     else
-        let l:bg = l:green
+        highlight ModeMsg guibg=#bf68d9
+        return "V-BLOCK"
     endif
+endf
 
-    exe 'hi User1 guifg=' . l:dark . ' guibg=' . l:bg . ' ctermfg=235 ctermbg=114 gui=bold'
-    exe 'hi User2 guifg=' . l:bg . ' guibg=' . l:grey . ' ctermfg=114 ctermbg=237'
-endfunction
+fu! WhatOS()
+  if has('win32') || has('win64')
+    if g:show_os_icon == 1
+        return ''
+    else
+        return 'windows'
+    endif
+  elseif has('unix') || has('linux')
+    if g:show_os_icon == 1
+        return ''
+    else
+        return 'unix'
+    endif
+  else
+    if g:show_os_icon == 1
+        return ''
+    else
+        return 'mac'
+    endif
+  endif
+endf
 
-augroup PowerlineMode
-    autocmd!
-    autocmd InsertEnter * call UpdateStatusColors('i')
-    autocmd InsertLeave * call UpdateStatusColors('n')
-    autocmd ModeChanged * call UpdateStatusColors(mode())
-    autocmd VimEnter * call UpdateStatusColors('n')
-augroup END
+highlight Dark guibg=#2a324a guifg=#93a4c3
+highlight LightGray guibg=#a0a8b7 guifg=#1A212E
 
 set statusline=
-set statusline+=%1*%{GetModeStr()}
-set statusline+=%2*
-set statusline+=%3*\ %f\ %m\ 
-set statusline+=%4*
-set statusline+=%*
-set statusline+=%=
-set statusline+=%5*
-set statusline+=%3*\ %y\ \|\ %l:%c\ \ 
+set statusline+=\%#ModeMsg#\ %{WhatMode()}
+set statusline+=\ %#Dark#\ %F
+set statusline+=\%=
+set statusline+=\ %{WhatOS()}
+set statusline+=\ \|\ %{&fileencoding}\ \|
+set statusline+=\ %Y
+set statusline+=\ %#LightGray#\ buf:%n
+set statusline+=\ %#ModeMsg#\ %l:%L\ 
 
-"  AUTOCOMPLETION
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-set completeopt=menuone,noinsert,noselect
+vnoremap <silent> y y:call system('wl-copy', @")<CR>
+nnoremap <silent> yy yy:call system('wl-copy', @")<CR>
+nnoremap <Leader>p :read !wl-paste<CR>

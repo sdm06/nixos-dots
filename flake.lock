@@ -39,37 +39,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1767767207,
-        "narHash": "sha256-Mj3d3PfwltLmukFal5i3fFt27L6NiKXdBezC1EBuZs4=",
+        "lastModified": 1767313136,
+        "narHash": "sha256-16KkgfdYqjaeRGBaYsNrhPRRENs0qzkQVUooNHtoy2w=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5912c1772a44e31bf1c63c0390b90501e5026886",
+        "rev": "ac62194c3917d5f474c1a844b6fd6da2db95077d",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "nixos-25.05",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "oxwm": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1767594993,
-        "narHash": "sha256-FdmLgqWyqISj6h7ur3DbycNe1opZ6rnBTSPRCmsFdPQ=",
-        "owner": "tonybanters",
-        "repo": "oxwm",
-        "rev": "fdc348b1e4e2d14da52c8bb6bfeb4246e240a72f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tonybanters",
-        "repo": "oxwm",
         "type": "github"
       }
     },
@@ -77,8 +57,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs",
-        "oxwm": "oxwm"
+        "nixpkgs": "nixpkgs"
       }
     }
   },
