@@ -24,20 +24,6 @@
   # --- Bluetooth ---
   hardware.bluetooth.enable = true; 
   hardware.bluetooth.powerOnBoot = true;
-
-  # --- Power Management ---
- #services.Logind = {
- #  lidSwitch = "suspend";
- #  lidSwitchExternalPower = "suspend";
- #  extraConfig = ''
- #    HandlePowerKey=suspend
- #    HandleLidSwitch=suspend
- #    HandleLidSwitchExternalPower=suspend
- #    IdleAction=suspend
- #    IdleActionSec=30m
- #  '';
- #};
-
   networking.networkmanager.wifi.powersave = false;
 
   # --- Networking ---
@@ -48,11 +34,8 @@
   xdg.portal = {
   enable = true;
   wlr.enable = true;
-  # GTK portal is needed for the "Select Screen" menu to appear
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   
-  # CRITICAL: Force 'wlr' for screen sharing. 
-  # Without this, it defaults to 'gtk' which cannot record Sway screens.
   config = {
     common = {
       default = [ "wlr" ];
@@ -60,7 +43,6 @@
     };
   };
 };
-# Ensure DBus is working correctly
   services.dbus.enable = true;
 
   # --- Display Manager ---
@@ -75,18 +57,10 @@
     wrapperFeatures.gtk = true;
   };
 
-  # --- OXWM ---
-  services.xserver = {
-    enable = true;
-    windowManager.oxwm.enable = true;
-  };
-
   # --- Security & Permissions ---
   security.polkit.enable = true;
   services.udev.packages = with pkgs; [ swayosd ];
 
-
-  
   # --- Virtualisation ---
   virtualisation.docker.enable = true;
   security.pam.services.swaylock = {};
@@ -97,7 +71,7 @@
       hostsPath = "https://raw.githubusercontent.com/stevenblack/hosts/master/hosts";
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
-        sha256 = "sha256-j0lJ+v2ICBOkL/1E06vkU1jyCFU7kcLDUPY/DYexVpo=";
+        sha256 = "sha256-2VwZUF5r3Z0wnlO6iGHQE1mDd5tOyKN85+hW2N1ki0o=";
       };
     in builtins.readFile hostsFile; 
 
@@ -109,7 +83,7 @@
 
   # --- System Packages ---
   environment.systemPackages = with pkgs; [
-    vim wget git foot brightnessctl papirus-icon-theme
+    vim wget git foot
   ];
 
   # --- Fonts ---

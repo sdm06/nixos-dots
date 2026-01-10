@@ -32,9 +32,9 @@
 
       # nixos stuff
       nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#sdnixos";
-      nc = "nvim ~/nixos-dotfiles/.";
-      nh = "nvim ~/nixos-dotfiles/home.nix";
-      np = "nvim ~/nixos-dotfiles/modules/packages.nix";
+      nc = "vim ~/nixos-dotfiles/.";
+      nh = "vim ~/nixos-dotfiles/home.nix";
+      np = "vim ~/nixos-dotfiles/modules/packages.nix";
       nclean = "sudo nix-collect-garbage --delete-older-than 3d && nix-store --optimise";
 
       # oxwm stuff

@@ -6,7 +6,6 @@ let
 
   # Standard .config/directory symlinks
   configs = {
-    nvim = "nvim";
     sway = "sway";
     wofi = "wofi";
     btop = "btop";
@@ -21,7 +20,6 @@ in
   # --- IMPORTS ---
   imports = [
     ./modules/packages.nix
-    ./modules/nvim.nix
     ./modules/bash.nix
     ./modules/tmux.nix
     ./modules/git.nix
