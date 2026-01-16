@@ -1,9 +1,7 @@
-/* ~/nixos-dotfiles/config/wofi/style.css */
-
 window {
     margin: 0px;
-    border: 2px solid #7aa2f7; /* Blue border */
-    background-color: #1a1b26; /* Tokyo Night Background */
+    border: 2px solid #f9f9f9;
+    background-color: #1b1b1b;
     font-family: "FiraCode Nerd Font";
     font-size: 14px;
 }
@@ -11,21 +9,21 @@ window {
 #input {
     margin: 5px;
     border: none;
-    color: #c0caf5;
-    background-color: #24283b;
+    color: #111111;
+    background-color: #36454f;
     border-radius: 5px;
 }
 
 #inner-box {
     margin: 5px;
     border: none;
-    background-color: #1a1b26;
+    background-color: #111111;
 }
 
 #outer-box {
     margin: 5px;
     border: none;
-    background-color: #1a1b26;
+    background-color: #111111;
 }
 
 #scroll {
@@ -40,10 +38,10 @@ window {
 }
 
 #entry:selected {
-    background-color: #7aa2f7; /* Selection Blue */
+    background-color: #c0c0c0;
     border-radius: 5px;
 }
 
 #entry:selected #text {
-    color: #1a1b26; /* Dark text on selection */
+    color: #1a1b26;
 }

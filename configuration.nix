@@ -71,7 +71,7 @@
       hostsPath = "https://raw.githubusercontent.com/stevenblack/hosts/master/hosts";
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
-        sha256 = "sha256-2VwZUF5r3Z0wnlO6iGHQE1mDd5tOyKN85+hW2N1ki0o=";
+        sha256 = "sha256-DAaZqGeXwDGQjd6rfSsA69DT0YBoOFm1XFd6brihCEw=";
       };
     in builtins.readFile hostsFile; 
 

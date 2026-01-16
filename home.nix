@@ -89,6 +89,12 @@ in
 
   # --- XDG DESKTOP ENTRIES ---
   xdg.desktopEntries = {
+    yazi = {
+      name = "yazi";
+      icon = "yazi";
+      exec = "foot -e yazi";
+      terminal = false;
+    };
     btop = {
       name = "btop";
       genericName = "System Monitor";

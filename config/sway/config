@@ -7,12 +7,12 @@ set $term foot
 set $menu wofi --show drun --allow-images
 
 # --- COLORS---------------------------------------------------
-set $bg     #282c34
+set $bg     #242124
 set $fg     #abb2bf
 set $red    #e06c75
 set $green  #98c379
 set $yellow #e5c07b
-set $blue   #61afef
+set $platinum   #e5e4e2
 set $purple #c678dd
 set $cyan   #56b6c2
 set $black  #181a1f
@@ -27,9 +27,9 @@ exec swayidle -w \
     before-sleep $lock
 
 # --- OUTPUT -------------------------------------------------------------------
-output * scale 1.5
+output * scale 2
 # Ensure this path is correct for your wallpaper
-output * bg ~/nixos-dotfiles/walls/nix-wallpaper-dracula.png fill
+output * bg ~/nixos-dotfiles/walls/nix-wallpaper-gear.png fill
 
 # --- APPEARANCE ---------------------------------------------------------------
 font pango:JetBrainsMono Nerd Font 11
@@ -38,7 +38,7 @@ default_border pixel 2
 default_floating_border pixel 2
 
 # Window Colors        Border   Background  Text    Indicator  Child Border
-client.focused         $blue    $blue       $bg     $blue      $blue
+client.focused         $platinum  $platinum       $bg     $platinum      $platinum
 client.focused_inactive $grey   $bg         $fg     $grey      $grey
 client.unfocused       $black   $bg         $grey   $black     $black
 client.urgent          $red     $red        $bg     $red       $red
@@ -171,6 +171,7 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 # --- AUTOSTART ----------------------------------------------------------------
 exec mako
 exec wl-paste --watch cliphist store
+exec swayosd.server
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -181,12 +182,12 @@ bar {
     font pango:JetBrainsMono Nerd Font 12
 
     colors {
-        background #282c34
+        background #3b444b
         statusline #abb2bf
-        separator  #5c6370
+        separator  #e5e4e2
 
-        focused_workspace  #61afef #61afef #282c34
-        active_workspace   #282c34 #282c34 #61afef
+        focused_workspace  #61afef #c0c0c0 #282c34
+        active_workspace   #282c34 #808080 #61afef
         inactive_workspace #282c34 #282c34 #5c6370
         urgent_workspace   #e06c75 #e06c75 #282c34
     }

@@ -1,10 +1,12 @@
+
+
 { pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     # --- GUI & Desktop ---
     librewolf
-    
+    obsidian
 
     # --- Sway Essentials ---
     swaylock          # Lock screen
