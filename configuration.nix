@@ -20,6 +20,7 @@
   hardware.graphics.enable = true; 
   programs.dconf.enable = true;
   services.pipewire.enable = true;
+   programs.thunar.enable = true;
 
   # --- Bluetooth ---
   hardware.bluetooth.enable = true; 
@@ -71,7 +72,7 @@
       hostsPath = "https://raw.githubusercontent.com/stevenblack/hosts/master/hosts";
       hostsFile = pkgs.fetchurl {
         url = hostsPath;
-        sha256 = "sha256-DAaZqGeXwDGQjd6rfSsA69DT0YBoOFm1XFd6brihCEw=";
+        sha256 = "sha256-4Fl4e/sC9t6UcOgyccVaMToUsiHYC5oP7I/4K9PEp78=";
       };
     in builtins.readFile hostsFile; 
 

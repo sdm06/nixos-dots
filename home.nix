@@ -12,6 +12,7 @@ let
     foot = "foot";
     i3status = "i3status";
     swayosd = "swayosd";
+    nvim = "nvim";
   };
 
 in

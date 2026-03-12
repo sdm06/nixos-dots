@@ -1,5 +1,3 @@
-
-
 { pkgs, ... }:
 
 {
@@ -7,7 +5,8 @@
     # --- GUI & Desktop ---
     librewolf
     obsidian
-
+    neovim
+    opencode
     # --- Sway Essentials ---
     swaylock          # Lock screen
     slurp
@@ -47,7 +46,8 @@
     zoxide
     starship
     bash-completion
-    
+    unzip
+    python3
     # --- Development & Cloud ---
     gcc               # C Compiler
     cargo
